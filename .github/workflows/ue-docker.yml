@@ -8,7 +8,9 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4          
+        uses: actions/checkout@v4        
+        with:
+          path: checkout
 
       # Once Windows Docker images become available at Sentry's GitHub package registry we'll handle build/tests same as in ci.yml 
       - name: Setup Sentry Unreal sample
