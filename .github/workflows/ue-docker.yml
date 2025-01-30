@@ -22,6 +22,10 @@ jobs:
       - name: Run Docker stuff
         run: |
           echo ${{ secrets.DOCKER_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker run -td --name unreal --volume "${{ github.workspace }}":"C:\workspace" ghcr.io/tustanivsky/ue-docker-test:4.27
+          docker run -td \
+            --name unreal \
+            --volume "${{ github.workspace }}":"C:\workspace" \
+            --workdir C:\workspace \
+            ghcr.io/tustanivsky/ue-docker-test:4.27
           docker exec -w C:\workspace\checkout\sample unreal cmd /C "C:\UnrealEngine\Engine\Build\BatchFiles\RunUAT.bat BuildCookRun -project=C:\workspace\checkout\sample\SentryPlayground.uproject -archivedirectory=C:\workspace\checkout\sample\Builds -platform=Win64 -nop4 -cook -build -stage -prereqss -package -archive"
           docker exec unreal cmd /C "C:\UnrealEngine\Engine\Binaries\Win64\UE4Editor.exe" "C:\workspace\checkout\sample\SentryPlayground.uproject" -ReportExportPath="C:\workspace\checkout\sample\Saved\Automation" -ExecCmds="Automation RunTests Sentry;quit" -TestExit="Automation Test Queue Empty" -Unattended -NoPause -NoSplash -NullRHI
