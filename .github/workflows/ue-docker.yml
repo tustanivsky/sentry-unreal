@@ -17,9 +17,8 @@ jobs:
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://github.com/getsentry/sentry-unreal/releases/download/0.22.0/sentry-unreal-0.22.0-engine4.27-github.zip" -OutFile "sentry-plugin.zip"
-          New-Item -ItemType Directory -Path "${{ github.workspace }}\sample\Plugins\sentry" -Force
-          Expand-Archive -Path "sentry-plugin.zip" -DestinationPath "${{ github.workspace }}\sample\Plugins\sentry" -Force
-          Get-ChildItem -Path "${{ github.workspace }}\sample\Plugins\sentry" -Recurse
+          New-Item -ItemType Directory -Path "${{ github.workspace }}\checkout\sample\Plugins\sentry" -Force
+          Expand-Archive -Path "sentry-plugin.zip" -DestinationPath "${{ github.workspace }}\checkout\sample\Plugins\sentry" -Force
 
       - name: Run Docker stuff
         run: |
