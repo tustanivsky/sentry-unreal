@@ -1,0 +1,27 @@
+name: Windows docker
+on:
+  push
+
+jobs:
+  download-plugin:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4          
+
+      # Once Windows Docker images become available at Sentry's GitHub package registry we'll handle build/tests same as in ci.yml 
+      - name: Setup Sentry Unreal sample
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/getsentry/sentry-unreal/releases/download/0.22.0/sentry-unreal-0.22.0-engine4.27-github.zip" -OutFile "sentry-plugin.zip"
+          New-Item -ItemType Directory -Path "${{ github.workspace }}\sample\Plugins\sentry" -Force
+          Expand-Archive -Path "sentry-plugin.zip" -DestinationPath "${{ github.workspace }}\sample\Plugins\sentry" -Force
+          Get-ChildItem -Path "${{ github.workspace }}\sample\Plugins\sentry" -Recurse
+
+      - name: Run Docker stuff
+        run: |
+          echo ${{ secrets.DOCKER_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker run -td --name unreal --volume "${{ github.workspace }}":C:\workspace ghcr.io/tustanivsky/ue-docker-test:4.27
+          docker exec -w C:\workspace\checkout\sample unreal cmd /C "C:\UnrealEngine\Engine\Build\BatchFiles\RunUAT.bat BuildCookRun -project=C:\workspace\checkout\sample\SentryPlayground.uproject -archivedirectory=C:\workspace\checkout\sample\Builds -platform=Win64 -nop4 -cook -build -stage -prereqss -package -archive"
+          docker exec unreal cmd /C "C:\UnrealEngine\Engine\Binaries\Win64\UE4Editor.exe" "C:\workspace\checkout\sample\SentryPlayground.uproject" -ReportExportPath="C:\workspace\checkout\sample\Saved\Automation" -ExecCmds="Automation RunTests Sentry;quit" -TestExit="Automation Test Queue Empty" -Unattended -NoPause -NoSplash -NullRHI
