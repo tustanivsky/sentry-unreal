@@ -6,6 +6,11 @@ jobs:
   download-plugin:
     runs-on: windows-latest
 
+    strategy:
+      fail-fast: false
+      matrix:
+        unreal: ['4.27', '5.3']
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4        
@@ -16,7 +21,7 @@ jobs:
       - name: Setup Sentry Unreal sample
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri "https://github.com/getsentry/sentry-unreal/releases/download/0.22.0/sentry-unreal-0.22.0-engine4.27-github.zip" -OutFile "sentry-plugin.zip"
+          Invoke-WebRequest -Uri "https://github.com/getsentry/sentry-unreal/releases/download/0.22.0/sentry-unreal-0.22.0-engine${{ matrix.unreal }}-github.zip" -OutFile "sentry-plugin.zip"
           New-Item -ItemType Directory -Path "${{ github.workspace }}\checkout\sample\Plugins\sentry" -Force
           Expand-Archive -Path "sentry-plugin.zip" -DestinationPath "${{ github.workspace }}\checkout\sample\Plugins\sentry" -Force
 
@@ -27,7 +32,7 @@ jobs:
             --name unreal `
             --volume "${{ github.workspace }}:C:\workspace" `
             --workdir C:\workspace `
-            ghcr.io/tustanivsky/ue-docker-test:4.27
+            ghcr.io/tustanivsky/ue-docker-test:${{ matrix.unreal }}
           docker exec unreal C:\UnrealEngine\Engine\Build\BatchFiles\RunUAT.bat BuildCookRun `
             -project=C:\workspace\checkout\sample\SentryPlayground.uproject `
             -archivedirectory=C:\workspace\checkout\sample\Builds `
