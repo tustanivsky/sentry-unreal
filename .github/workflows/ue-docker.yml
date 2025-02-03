@@ -44,7 +44,7 @@ jobs:
             -prereqss `
             -package `
             -archive
-          docker exec unreal C:\UnrealEngine\Engine\Binaries\Win64\UE4Editor.exe C:\workspace\checkout\sample\SentryPlayground.uproject `
+          docker exec unreal C:\UnrealEngine\Engine\Binaries\Win64\${{ matrix.unreal == '4.27' && 'UE4Editor.exe' || 'UnrealEditor.exe' }} C:\workspace\checkout\sample\SentryPlayground.uproject `
             -ReportExportPath=C:\workspace\checkout\sample\Saved\Automation `
             -ExecCmds="Automation RunTests Sentry;quit" `
             -TestExit="Automation Test Queue Empty" `
