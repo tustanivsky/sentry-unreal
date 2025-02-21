@@ -1,4 +1,4 @@
-name: Build UE Windows Docker image
+name: Build UE Windows Docker image ${{ inputs.ue_version }}
 
 on:
   workflow_dispatch:
