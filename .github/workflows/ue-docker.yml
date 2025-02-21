@@ -61,13 +61,13 @@ jobs:
           -basetag ltsc2022 \
           -suffix "${{ inputs.ue_version }}" \
           -isolation=process \
-          -username=${{ secrets.DOCKER_USERNAME }} \
-          -password=${{ secrets.DOCKER_TOKEN }} \
           --visual-studio ${{ steps.set_vs_version.outputs.vs_version }} \
           --target minimal \
           --exclude debug \
           --exclude templates \
-          --opt buildgraph-args="-set:WithClient=false -set:WithServer=false"
+          --opt buildgraph-args="-set:WithClient=false -set:WithServer=false" \
+          -username=${{ secrets.DOCKER_USERNAME }} \
+          -password=${{ secrets.DOCKER_TOKEN }}
 
       - name: Tag Unreal Engine Docker image
         run: |
