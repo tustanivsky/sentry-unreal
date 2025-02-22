@@ -42,18 +42,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12.8'
-          architecture: 'x64'
-
-      - name: Install wget
-        run: |
-          choco install wget
-
-      - name: Configure docker daemon
-        run: |
-          New-Item -Path "C:\ProgramData\docker\config" -ItemType Directory -Force
-          Set-Content -Path "C:\ProgramData\docker\config\daemon.json" -Value '{ "dns": ["8.8.8.8"] }'
-          Restart-Service docker
+          python-version: '3.10'
 
       - name: Install unreal-docker
         run: |
