@@ -45,6 +45,12 @@ jobs:
           python-version: '3.12.8'
           architecture: 'x64'
 
+      - name: Configure docker daemon
+        run: |
+          New-Item -Path "C:\ProgramData\docker\config" -ItemType Directory -Force
+          Set-Content -Path "C:\ProgramData\docker\config\daemon.json" -Value '{ "dns": ["8.8.8.8"] }'
+          Restart-Service docker
+
       - name: Install unreal-docker
         run: |
           pip install ue4-docker
@@ -52,6 +58,7 @@ jobs:
       - name: Configure unreal-docker
         run: |
           ue4-docker setup
+          ue4-docker diagnostics network
 
       - name: Build Unreal Engine Docker image
         run: |
