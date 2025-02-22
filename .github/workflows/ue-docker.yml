@@ -47,7 +47,7 @@ jobs:
 
       - name: Install wget
         run: |
-          Invoke-WebRequest -Uri "https://eternallybored.org/misc/wget/current/wget.exe" -OutFile "C:\\Windows\\System32\\wget.exe"
+          choco install wget
 
       - name: Configure docker daemon
         run: |
