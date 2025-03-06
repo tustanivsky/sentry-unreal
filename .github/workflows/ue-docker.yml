@@ -39,7 +39,6 @@ jobs:
             -archivedirectory=C:\workspace\checkout\sample\Builds `
             -platform=Win64 `
             -nop4 `
-            -cook `
             -build `
             -stage `
             -prereqss `
