@@ -33,7 +33,7 @@ jobs:
             --name unreal `
             --volume "${{ github.workspace }}:C:\workspace" `
             --workdir C:\workspace `
-            ghcr.io/getsentry/unreal-docker::${{ matrix.unreal }}
+            ghcr.io/getsentry/unreal-docker:${{ matrix.unreal }}
           docker exec unreal C:\UnrealEngine\Engine\Build\BatchFiles\RunUAT.bat BuildCookRun `
             -project=C:\workspace\checkout\sample\SentryPlayground.uproject `
             -archivedirectory=C:\workspace\checkout\sample\Builds `
