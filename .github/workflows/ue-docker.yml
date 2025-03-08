@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         # unreal: ['4.27', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5']
-        unreal: ['4.27']
+        unreal: ['4.27', '5.0', '5.1', '5.2']
 
     steps:
       - name: Checkout Repository
@@ -41,6 +41,7 @@ jobs:
             -nop4 `
             -build `
             -stage `
+            -cook `
             -prereqss `
             -package `
             -archive
